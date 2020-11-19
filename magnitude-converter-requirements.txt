@@ -1,0 +1,6 @@
+h5py
+torch
+fasteners
+annoy
+xxhash
+lz4
