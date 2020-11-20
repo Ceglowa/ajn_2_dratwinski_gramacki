@@ -1,3 +1,5 @@
+import abc
+
 import numpy as np
 from pymagnitude import Magnitude
 from tqdm import tqdm
@@ -5,51 +7,83 @@ from tqdm import tqdm
 from data_loader import load_simlex_data
 
 
-def get_euclidean_distance(first, second):
-    emb_1 = vectors.query(first)
-    emb_2 = vectors.query(second)
+class EmbeddingMetric(abc.ABC):
+    def __init__(self, vectors):
+        self.vectors = vectors
 
-    value = np.linalg.norm(emb_1 - emb_2)
-    return (((value - 0) * (0 - 10)) / (1.5 - 0)) + 10
+    @abc.abstractmethod
+    def get_distance(self, first, second):
+        pass
+
+    def get_k_nearest(self, anchor, k, dictionary):
+        if k > len(dictionary):
+            raise ValueError
+
+        distances = [
+            (word, self.get_distance(anchor, word))
+            for word in dictionary
+        ]
+
+        distances.sort(key=lambda x: x[1], reverse=True)
+
+        return distances[:k]
 
 
-def get_cosine_distance(first, second):
-    emb_1 = vectors.query(first)
-    emb_2 = vectors.query(second)
+class EuclideanMetric(EmbeddingMetric):
+    def __init__(self, vectors, scaling_max=1.3, scaling_min=0):
+        super(EuclideanMetric, self).__init__(vectors)
+        self.scaling_max = scaling_max
+        self.scaling_min = scaling_min
 
-    emb_1 = emb_1 / np.linalg.norm(emb_1)
-    emb_2 = emb_2 / np.linalg.norm(emb_2)
+    def get_distance(self, first, second):
+        emb_1 = self.vectors.query(first)
+        emb_2 = self.vectors.query(second)
 
-    value = np.dot(emb_1, emb_2)
-    return (((value - -1) * (10 - 0)) / (1 - -1)) + 0
+        value = np.linalg.norm(emb_1 - emb_2)
+        return (((value - self.scaling_min) * (0 - 10)) / (
+                self.scaling_max - self.scaling_min)) + 10
 
 
-simlex_data = load_simlex_data()
+class CosineMetric(EmbeddingMetric):
+    def __init__(self, vectors):
+        super(CosineMetric, self).__init__(vectors)
 
-vectors = Magnitude('../data/nkjp+wiki-lemmas-restricted-300-skipg-ns.magnitude')
+    def get_distance(self, first, second):
+        emb_1 = self.vectors.query(first)
+        emb_2 = self.vectors.query(second)
 
-out_of_vocab = set()
-euclidean_dist = []
-cosine_dist = []
+        emb_1 = emb_1 / np.linalg.norm(emb_1)
+        emb_2 = emb_2 / np.linalg.norm(emb_2)
 
-for idx, row in tqdm(simlex_data.iterrows(), total=len(simlex_data)):
-    if row['word1'] not in vectors:
-        out_of_vocab.add(row['word1'])
-    if row['word2'] not in vectors:
-        out_of_vocab.add(row['word2'])
+        value = np.dot(emb_1, emb_2)
+        return (((value - -1) * (10 - 0)) / (1 - -1)) + 0
 
-    euclidean_dist.append(get_euclidean_distance(row['word1'], row['word2']))
-    cosine_dist.append(get_cosine_distance(row['word1'], row['word2']))
 
-cosine_dist.append(get_cosine_distance('kot', 'kot'))
-euclidean_dist.append(get_euclidean_distance('kot', 'kot'))
+if __name__ == '__main__':
+    simlex_data = load_simlex_data()
 
-print(f"Out of vocab words: {out_of_vocab}")
-print("Euclidean distance")
-print(f'max: {max(euclidean_dist)}')
-print(f'min: {min(euclidean_dist)}')
-print(f'same: {euclidean_dist[-1]}')
-print("Cosine distance")
-print(f'max: {max(cosine_dist)}')
-print(f'min: {min(cosine_dist)}')
-print(f'same: {cosine_dist[-1]}')
+    dictionary = set()
+    dictionary.update(simlex_data['word1'].unique())
+    dictionary.update(simlex_data['word2'].unique())
+
+    cosine_metric = CosineMetric(
+        Magnitude('../data/nkjp+wiki-lemmas-restricted-300-skipg-ns.magnitude'))
+
+    euklidean_metric = EuclideanMetric(
+        Magnitude('../data/nkjp+wiki-lemmas-restricted-300-skipg-ns.magnitude'))
+
+    anchor_word = 'kompania'
+    k = 20
+
+    k_nearest_euklidean = euklidean_metric.get_k_nearest(
+        anchor_word, k, dictionary
+    )
+
+    k_nearest_cosine = cosine_metric.get_k_nearest(
+        anchor_word, k, dictionary
+    )
+
+    print(f"{k} nearest words to {anchor_word} by euclidean metric")
+    print(k_nearest_euklidean)
+    print(f"{k} nearest words to {anchor_word} by cosine metric")
+    print(k_nearest_cosine)
