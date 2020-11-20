@@ -2,4 +2,7 @@ venv
 .idea
 __pycache__
 data/graph.gml
+data/nkjp+wiki-lemmas-all-300-skipg-hs.txt
+.python-version
+*.magnitude
 .ipynb_checkpoints
