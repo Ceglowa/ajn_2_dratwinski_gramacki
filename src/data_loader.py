@@ -2,7 +2,7 @@ import pandas as pd
 import os
 import plwn
 
-PATH_TO_DATA_FOLDER = "../data"
+PATH_TO_DATA_FOLDER = "data"
 
 def load_simlex_data():
     simlex_data = pd.read_csv(PATH_TO_DATA_FOLDER + os.path.sep + "MSimLex999_Polish.txt", sep="\t", index_col=0,
