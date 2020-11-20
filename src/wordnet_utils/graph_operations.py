@@ -1,4 +1,4 @@
-from networkx import MultiDiGraph, DiGraph, simple_cycles
+from networkx import MultiDiGraph, DiGraph, simple_cycles, Graph
 from igraph import Graph
 
 
@@ -16,3 +16,13 @@ def delete_two_cycles_from_hiperonimia_graph(graph: DiGraph) -> None:
     graph.remove_edge('55305', '2367')
     list_of_cycles_before_remove = list(simple_cycles(graph))
     print(f"Number of cycles after removal: {len(list_of_cycles_before_remove)}")
+
+def create_undirected_graph(graph: DiGraph) -> Graph:
+    copied_directed = graph.copy()
+
+    copied_directed.add_node("0")
+    for node in copied_directed.nodes:
+        if copied_directed.in_degree(node) == 0 and node != "0":
+            copied_directed.add_edge("0", node)
+
+    return Graph(copied_directed)
