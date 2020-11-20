@@ -2,8 +2,6 @@ import pandas as pd
 import os
 import plwn
 
-PATH_TO_DATA_FOLDER = "../../data"
-
 def load_simlex_data(path_to_simlex_data: str):
     simlex_data = pd.read_csv(path_to_simlex_data, sep="\t", index_col=0,
                  names=["nr", "word1", "word2", "similarity","relatedness"])
