@@ -101,7 +101,7 @@
 101	śmiały	dumny	1.14	4.14
 102	dziwny	przebiegły	0.29	2.14
 103	dziwny	chytry	1.43	2
-104	głupi 	rzadki	0	0
+104	głupi	rzadki	0	0
 105	przebiegły	twardy	0	0.14
 106	niesamowity	szalony	1.71	3.43
 107	skromny	elastyczny	0	0.29
@@ -361,7 +361,7 @@
 361	ciotka	siostrzeniec	0.57	7.14
 362	robotnik	mechanik	4.43	7
 363	lekarz	ortodonta	3.86	7.43
-364	dąb 	klon	2.43	7.43
+364	dąb	klon	2.43	7.43
 365	pszczoła	królowa	0.71	5.14
 366	samochód	rower	0.71	6.71
 367	cel	poszukiwanie	0.14	5
@@ -575,7 +575,7 @@
 575	szczęście	spokój	2.14	6.14
 576	rozpacz	niedola	3.43	6.71
 577	logika	arytmetyka	2	6.29
-578	zaprzeczenie	spowiedż	0.43	1.71
+578	zaprzeczenie	spowiedź	0.43	1.71
 579	spór	krytyka	1.57	3.86
 580	agresja	wrogość	4.71	7.86
 581	histeria	zamieszanie	3	4.86
