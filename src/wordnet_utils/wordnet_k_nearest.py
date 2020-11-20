@@ -8,7 +8,6 @@ from wordnet_utils.similarities import WordNetSimilarities
 import os
 import pickle as pkl
 
-simlex_data = load_simlex_data("../../data/MSimLex999_Polish.txt")
 graph = nx.read_graphml("../../data/graph.gml")
 wn, synsets = load_plwn_data()
 
@@ -32,7 +31,7 @@ def get_similarities(search_word: str, dictionary: set, similarity_measure: Call
         return distances
 
 def get_similarities_for_both_measures(anchor_word: str):
-    simlex_data = load_simlex_data()
+    simlex_data = load_simlex_data("../../data/MSimLex999_Polish.txt")
 
     dictionary = set()
     dictionary.update(simlex_data['word1'].unique())
@@ -63,5 +62,5 @@ def run(word_to_be_analyzed: str, k: int):
     print(f"{k} nearest words to {word_to_be_analyzed} by Leacock-Chodorow metric")
     print(lc_sims[:k])
 
-if __name__ == '__main__':
-    run("głupi", 5)
+# if __name__ == '__main__':
+run("głupi", 5)
