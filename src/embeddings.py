@@ -112,4 +112,4 @@ def test_on_simlex(filename: Union[str, None] = None):
 
 if __name__ == '__main__':
     test_k_nearest(20, 'kot')
-    test_on_simlex('../emneddings_results.csv')
+    test_on_simlex('../results/emneddings_results.csv')

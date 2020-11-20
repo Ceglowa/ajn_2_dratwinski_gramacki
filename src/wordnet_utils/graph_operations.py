@@ -1,5 +1,4 @@
 from networkx import MultiDiGraph, DiGraph, simple_cycles, Graph
-from igraph import Graph
 
 
 def get_graph_with_specified_relation(graph: MultiDiGraph, relation="hiperonimia") -> DiGraph:
