@@ -31,10 +31,8 @@ class EmbeddingMetric(abc.ABC):
 
 
 class EuclideanMetric(EmbeddingMetric):
-    def __init__(self, vectors, scaling_max=1.3, scaling_min=0):
+    def __init__(self, vectors):
         super(EuclideanMetric, self).__init__(vectors)
-        self.scaling_max = scaling_max
-        self.scaling_min = scaling_min
         self.epsilon = 10e-8
 
     def get_distance(self, first, second):
@@ -43,8 +41,6 @@ class EuclideanMetric(EmbeddingMetric):
 
         value = np.linalg.norm(emb_1 - emb_2)
         return 1.5 - value
-        # return (((value - self.scaling_min) * (0 - 10)) / (
-        #         self.scaling_max - self.scaling_min)) + 10
 
 
 class CosineMetric(EmbeddingMetric):
