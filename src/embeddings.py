@@ -27,7 +27,7 @@ class EmbeddingMetric(abc.ABC):
 
         distances.sort(key=lambda x: x[1], reverse=True)
 
-        return distances[:k]
+        return distances[1:k + 1]
 
 
 class EuclideanMetric(EmbeddingMetric):
@@ -59,12 +59,21 @@ class CosineMetric(EmbeddingMetric):
 
 
 def get_simlex_and_metrics():
-    simlex_data = load_simlex_data()
+    simlex_data = load_simlex_data('../data/MSimLex999_Polish.txt')
     euklidean_metric = EuclideanMetric(
         Magnitude('../data/nkjp+wiki-lemmas-restricted-300-skipg-ns.magnitude'))
     cosine_metric = CosineMetric(
         Magnitude('../data/nkjp+wiki-lemmas-restricted-300-skipg-ns.magnitude'))
     return simlex_data, euklidean_metric, cosine_metric
+
+
+def prepare_for_report_tab(k_nearest):
+    res = ""
+
+    for word, distance in k_nearest:
+        res = f'{res} </br> {word} - {distance:.4f} '
+
+    print(res)
 
 
 def test_k_nearest(k: int, anchor_word: str):
@@ -83,9 +92,11 @@ def test_k_nearest(k: int, anchor_word: str):
     )
 
     print(f"{k} nearest words to {anchor_word} by euclidean metric")
-    print(k_nearest_euklidean)
+    # print(k_nearest_euklidean)
+    prepare_for_report_tab(k_nearest_euklidean)
     print(f"{k} nearest words to {anchor_word} by cosine metric")
-    print(k_nearest_cosine)
+    # print(k_nearest_cosine)
+    prepare_for_report_tab(k_nearest_cosine)
 
 
 def test_on_simlex(filename: Union[str, None] = None):
@@ -111,5 +122,8 @@ def test_on_simlex(filename: Union[str, None] = None):
 
 
 if __name__ == '__main__':
-    test_k_nearest(20, 'kot')
-    test_on_simlex('../results/emneddings_results.csv')
+    words = ['drewno', 'głupi', 'kot', 'książka', 'rower']
+
+    for word in words:
+        test_k_nearest(10, word)
+    # test_on_simlex('../results/emneddings_results.csv')
