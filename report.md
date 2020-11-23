@@ -8,11 +8,15 @@
 
  - Odległość euklidesowa:
 
-<img src="https://latex.codecogs.com/gif.latex? Sim(s1, s2) = |emb(s1) - emb(s2)|," \>
+\begin{equation}
+    Sim(s1, s2) = |emb(s1) - emb(s2)|,
+\end{equation}
 
 gdzie $emb(x)$ oznacza wektor osadzeń dla słowa $x$. Miara ta jest odwrotnie proporcjonalna do podobieństwa słów ($Sim(x, x) = 0$), więc przeskalowano je liniowo aby $Sim(x, x)$ przyjmowało wartość maksymalną. Wykorzystano przekształcenie:
 
-<img src="https://latex.codecogs.com/gif.latex? Sim(s1, s2) = 1.5 - Sim(s1, s2)." \>
+\begin{equation}
+    Sim(s1, s2) = 1.5 - Sim(s1, s2).
+\end{equation}
  - Miara cosinusowa:
 
 \begin{equation}
